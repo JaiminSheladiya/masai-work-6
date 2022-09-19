@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=\, initial-scale=1.0">
+    <title>Telegram</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.2/socket.io.js" integrity="sha512-VJ6+sp2E5rFQk05caiXXzQd1wBABpjEj1r5kMiLmGAAgwPItw1YpqsCCBtq8Yr1x6C49/mTpRdXtq8O2RcZhlQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+    <div id="message"></div>
+
+    <form id="form">
+        <input type="text" id="input" autocomplete="off" />
+        <button type="submit">send</button>
+    </form>
+
+    <script>
+    const socket = io();  // this connects to socket.io
+   const username = prompt('enter your unsername')
+    const formE1 = document.getElementById('form')
+    const inputE1 = document.getElementById('input')
+    const messageDiv = document.getElementById('message')
+    
+   formE1.addEventListener('submit', (e)=>{
+    e.preventDefault()
+    console.log('new messagwe')
+    socket.emit('new message' , {
+        from : username,
+        text : inputE1.value
+    })
+    inputE1.value = ''
+})
+
+socket.on('new message' , (message)=>{
+    const span = document.createElement('div')
+    const b = document.createElement('b')
+        b.innerText = message.from
+    span.innerText = message.text;
+    messageDiv.appendChild(b)
+    messageDiv.appendChild(span)
+})
+
+socket.on('history',(h)=>{
+    for(let m of h){
+        const span = document.createElement('div')
+    span.innerText = m;
+    messageDiv.appendChild(span)
+    } 
+})
+
+socket.on('joined' , ()=>{
+    const p = document.createElement('p')
+    p.innerText = 'A new user joined'
+    messageDiv.appendChild(p)
+})
+
+socket.emit('new user',username)
+
+   </script>
+</body>
+</html>

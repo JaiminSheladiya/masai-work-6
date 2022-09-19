@@ -1,0 +1,10 @@
+{
+    "Student" : {
+        "assignment" : "RW",
+        "lecture" : "R"
+    },
+    "Admin" : {
+        "assignment" : "RWDU",
+        "lecture" : "RWDU"
+    }
+}
